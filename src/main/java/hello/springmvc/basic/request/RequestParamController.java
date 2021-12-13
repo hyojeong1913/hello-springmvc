@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -183,6 +185,45 @@ public class RequestParamController {
 
         log.info("username = {}", paramMap.get("username"));
         log.info("age = {}", paramMap.get("age"));
+
+        return "OK";
+    }
+
+    /**
+     * @ModelAttribute 사용
+     *
+     * 요청 파라미터를 받아서 필요한 객체를 만들고 해당 프로퍼티의 setter 를 호출해서 파라미터의 값을 바인딩
+     *
+     * 타입이 다른 값을 넣으면 바인딩 오류가 나므로 검증 부분에서 예외 처리 필요
+     *
+     * @param helloData
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+
+        log.info("username = {}", helloData.getUsername());
+        log.info("age = {}", helloData.getAge());
+
+        return "OK";
+    }
+
+    /**
+     * @ModelAttribute 생략 가능
+     *
+     * String, int 같은 단순 타입 = @RequestParam
+     * argument resolver 로 지정해둔 타입 외 = @ModelAttribute
+     *
+     * @param helloData
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+
+        log.info("username = {}", helloData.getUsername());
+        log.info("age = {}", helloData.getAge());
 
         return "OK";
     }
